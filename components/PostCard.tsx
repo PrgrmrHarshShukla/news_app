@@ -24,7 +24,7 @@ export default function PostCard({
 
 
   return (
-    <View style={tw`bg-white rounded-2xl boxShadow-md p-4 mb-4 w-[85%] max-w-[500px] self-center`}>
+    <View style={tw`bg-white rounded-2xl shadow-md p-4 mb-4 w-[95%] h-auto max-w-[500px] self-center`}>
       {/* Top Section */}
       <View style={tw`flex-row justify-between items-start mb-2`}>
         <View style={tw`flex-1 pr-2`}>
@@ -45,7 +45,7 @@ export default function PostCard({
       {imageUri && (
         <Image
           source={{ uri: imageUri }}
-          style={tw`w-full h-48 rounded-md border border-gray-300 mb-3`}
+          style={tw`h-48 rounded-md border border-gray-300 mb-3`}
           resizeMode="contain"
         />
       )}

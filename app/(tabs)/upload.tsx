@@ -54,8 +54,8 @@ export default function NewsForm() {
       const id = generateId();
       const news_object: post_type = {
         id,
-        title,
-        description,
+        title: verificationResponse.new_title ?? title,
+        description: verificationResponse.new_description ?? description,
         city,
         category,
         firstName,
@@ -65,8 +65,7 @@ export default function NewsForm() {
       };
       
       await savePost(news_object);
-  
-      Alert.alert('Success', 'News submitted successfully!');
+
       router.push({
         pathname: '/(tabs)',
         params: {
@@ -76,7 +75,6 @@ export default function NewsForm() {
       
     } catch (error) {
       console.log("Error while uploading post!", error);
-      
     } finally {
       setLoading(false);
     }

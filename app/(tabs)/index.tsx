@@ -1,7 +1,7 @@
 import tw from '@/twrnc';
-import { useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
-import { Alert, FlatList, Text } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Alert, ScrollView, Text, View } from 'react-native';
 
 import PostCard from '@/components/PostCard';
 import { post_type } from '@/constants/types';
@@ -42,16 +42,15 @@ export default function HomeScreen() {
 
   
 
-  return (
-      <FlatList
-        data={posts}
-        contentContainerStyle={tw`flex justify-start items-center mt-8 mb-20 p-4 w-full`}
-        ListHeaderComponent={<Text style={tw`text-white text-2xl font-semibold mb-8`}>AI News</Text>}
-        renderItem={({ item }) => <PostCard post={item} onDelete={onDelete} />}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={
-          <Text style={tw`text-gray-400 text-base mt-10`}>No posts available.</Text>
+  return (  
+    <ScrollView horizontal={false} style={tw`w-full h-auto`}>
+      <View style={tw`flex flex-col justify-start items-center min-h-full mt-8 mb-20 p-4`}>
+        <Text style={tw`text-white text-2xl font-semibold mt-4`}>AI News</Text>
+        <View style={tw`mb-4 mt-4`}></View>
+        {
+          posts.map((post, index) => <PostCard key={index} post={post} onDelete={onDelete} />)
         }
-      />
+      </View>
+    </ScrollView>
   );
 }
