@@ -70,7 +70,7 @@ export default function NewsForm() {
       router.push({
         pathname: '/(tabs)',
         params: {
-          toRefresh: '1'
+          toRefresh: String(Date.now())
         }
       });
       
@@ -159,8 +159,8 @@ export default function NewsForm() {
         {imageUri && (
           <Image
             source={{ uri: imageUri }}
-            style={tw`w-[85%] max-w-[500px] h-40 mb-3 rounded`}
-            resizeMode="cover"
+            style={tw`w-[85%] max-w-[500px] h-48 border border-gray-300 mb-3 rounded`}
+            resizeMode="contain"
           />
         )}
 
