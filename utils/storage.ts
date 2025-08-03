@@ -32,3 +32,37 @@ export async function deletePost(id: string) {
     throw new Error('Unable to delete post at this time.');
   }
 }
+
+// Add bookmark
+export async function addBookMarkAsync(id: string) {
+  try {
+    const posts = await getPosts();
+    const updatedPosts = posts.map(post =>
+      post.id === id ? { ...post, isBookMarked: true } : post
+    );
+    await AsyncStorage.setItem(POSTS_KEY, JSON.stringify(updatedPosts));
+  } catch (error) {
+    console.error('Error bookmarking post:', error);
+    throw new Error('Unable to bookmark post.');
+  }
+}
+
+// Remove bookmark
+export async function removeBookMarkAsync(id: string) {
+  try {
+    const posts = await getPosts();
+    const updatedPosts = posts.map(post =>
+      post.id === id ? { ...post, isBookMarked: false } : post
+    );
+    await AsyncStorage.setItem(POSTS_KEY, JSON.stringify(updatedPosts));
+  } catch (error) {
+    console.error('Error removing bookmark:', error);
+    throw new Error('Unable to remove bookmark.');
+  }
+}
+
+// Get only bookmarked posts (optional)
+export async function getBookmarkedPosts(): Promise<post_type[]> {
+  const posts = await getPosts();
+  return posts.filter(post => post.isBookMarked);
+}

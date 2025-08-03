@@ -5,10 +5,14 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export default function PostCard({
   post,
-  onDelete
+  onDelete,
+  addBookMark,
+  removeBookMark
 }: {
   post: post_type;
   onDelete: (id: string) => void;
+  addBookMark: (id: string) => void;
+  removeBookMark: (id: string) => void;
 }) {
   const {
     id,
@@ -32,9 +36,15 @@ export default function PostCard({
           <Text style={tw`text-sm text-gray-500`}>{category} | {city}</Text>
         </View>
         <View style={tw`flex-row items-center gap-2`}>
-          {isBookMarked && (
-            <MaterialIcons name="bookmark" size={22} color="#facc15" style={tw`mr-2`} />
-          )}
+          {isBookMarked ? 
+            <TouchableOpacity onPress={() => removeBookMark(id)}>
+              <MaterialIcons name="bookmark" size={22} color="#facc15" style={tw`mr-2`} />
+            </TouchableOpacity>
+            : 
+            <TouchableOpacity onPress={() => addBookMark(id)}>
+              <MaterialIcons name="bookmark-border" size={22} color="#facc15" style={tw`mr-2`} />
+            </TouchableOpacity>
+          }
           <TouchableOpacity onPress={() => onDelete(id)}>
             <MaterialIcons name="close" size={22} color="#544d4cf5" />
           </TouchableOpacity>
