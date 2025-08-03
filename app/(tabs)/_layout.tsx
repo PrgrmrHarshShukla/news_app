@@ -36,7 +36,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="upload"
         options={{
-          title: 'upload',
+          title: 'Upload',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="square.and.arrow.up" color={color} />,
         }}
       />

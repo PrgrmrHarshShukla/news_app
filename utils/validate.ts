@@ -33,8 +33,8 @@ export default async function validator({
 
   return {
     success: true,
-    title: improvedTitle,
-    description: improvedDescription,
+    new_title: improvedTitle,
+    new_description: improvedDescription,
   };
 }
 

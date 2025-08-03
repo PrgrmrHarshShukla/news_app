@@ -1,7 +1,11 @@
+import { post_type } from '@/constants/types';
 import tw from '@/twrnc';
-import validator from '@/validate';
+import generateId from '@/utils/generateId';
+import { savePost } from '@/utils/storage';
+import validator from '@/utils/validate';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
@@ -16,41 +20,67 @@ export default function NewsForm() {
   const [loading, setLoading] = useState(false);
 
   const validateAndSubmit = async () => {
+    setLoading(true);
     if (!title || !description || !city || !category || !firstName || !phone) {
       Alert.alert('Error', 'Please fill all fields (image is optional).');
+      setLoading(false);
       return;
     }
     if (description.length < 50) {
       Alert.alert('Error', 'Description must be at least 50 characters.');
+      setLoading(false);
       return;
     }
     if (phone.length !== 10) {
       Alert.alert('Error', 'Contact number must have 10 digits.');
+      setLoading(false);
       return;
     }
-
-    const news_object = {
-      title,
-      description,
-      city,
-      category,
-      firstName,
-      phone,
-      imageUri
-    };
-
-    const verificationResponse = await validator({
-      title,
-      description
-    });
-
-    console.log(verificationResponse);
     
+    
+    try {
+      const verificationResponse = await validator({
+        title,
+        description
+      });
+      if (!verificationResponse.success) {
+        Alert.alert('Error', 'Some unexpected error occured while validating your post, please try again!')
+        setLoading(false);
+        return;
+      }
+      setTitle(verificationResponse.new_title ?? title);
+      setDescription(verificationResponse.new_description ?? description);
 
+      const id = generateId();
+      const news_object: post_type = {
+        id,
+        title,
+        description,
+        city,
+        category,
+        firstName,
+        phone,
+        imageUri,
+        isBookMarked: false
+      };
+      
+      await savePost(news_object);
+  
+      Alert.alert('Success', 'News submitted successfully!');
+      router.push({
+        pathname: '/(tabs)',
+        params: {
+          toRefresh: '1'
+        }
+      });
+      
+    } catch (error) {
+      console.log("Error while uploading post!", error);
+      
+    } finally {
+      setLoading(false);
+    }
 
-
-
-    Alert.alert('Success', 'News submitted successfully!');
   };
 
   const pickImage = async () => {
@@ -135,8 +165,8 @@ export default function NewsForm() {
         )}
 
         {loading ?
-          <View style={tw`bg-blue-500 p-2 px-3 mt-8 rounded mb-3`}>
-            <ActivityIndicator  />
+          <View style={tw`bg-blue-500 p-2 px-3 mt-8 rounded mb-3 w-20`}>
+            <ActivityIndicator color='white' />
           </View>
           :
           <Pressable disabled={loading} onPress={validateAndSubmit} style={tw`bg-blue-500 p-2 px-3 mt-8 rounded mb-3`}>
