@@ -1,110 +1,149 @@
+import tw from '@/twrnc';
+import validator from '@/validate';
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import React, { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
+export default function NewsForm() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [city, setCity] = useState('');
+  const [category, setCategory] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [imageUri, setImageUri] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-export default function TabTwoScreen() {
+  const validateAndSubmit = async () => {
+    if (!title || !description || !city || !category || !firstName || !phone) {
+      Alert.alert('Error', 'Please fill all fields (image is optional).');
+      return;
+    }
+    if (description.length < 50) {
+      Alert.alert('Error', 'Description must be at least 50 characters.');
+      return;
+    }
+    if (phone.length !== 10) {
+      Alert.alert('Error', 'Contact number must have 10 digits.');
+      return;
+    }
+
+    const news_object = {
+      title,
+      description,
+      city,
+      category,
+      firstName,
+      phone,
+      imageUri
+    };
+
+    const verificationResponse = await validator({
+      title,
+      description
+    });
+
+    console.log(verificationResponse);
+    
+
+
+
+
+    Alert.alert('Success', 'News submitted successfully!');
+  };
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      allowsEditing: true,
+    });
+
+    if (!result.canceled && result.assets.length > 0) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
+    <ScrollView horizontal={false} style={tw`w-full h-auto`}>
+      <View style={tw`flex flex-col justify-start items-center min-h-full mt-8 mb-20 p-4 pt-12`}>
+        <Text style={tw`text-2xl font-bold mb-12 text-white`}>Upload News</Text>
+
+        <TextInput
+          placeholderTextColor="#717a7aff"
+          placeholder="News Title"
+          value={title}
+          onChangeText={setTitle}
+          style={tw`border border-gray-300 w-[85%] max-w-[500px] p-2 mb-3 rounded text-white`}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+
+        <TextInput
+          placeholderTextColor="#717a7aff"
+          placeholder="Description (min 50 chars)"
+          value={description}
+          onChangeText={setDescription}
+          multiline
+          numberOfLines={4}
+          textAlignVertical="top" 
+          style={tw`border border-gray-300 w-[85%] max-w-[500px] p-2 mb-3 rounded h-28 text-left text-white`}
+        />
+
+        <TextInput
+          placeholderTextColor="#717a7aff"
+          placeholder="City"
+          value={city}
+          onChangeText={setCity}
+          style={tw`border border-gray-300 w-[85%] max-w-[500px] p-2 mb-3 rounded text-white`}
+        />
+
+        <TextInput
+          placeholderTextColor="#717a7aff"
+          placeholder="Category (e.g., Accident, Festival)"
+          value={category}
+          onChangeText={setCategory}
+          style={tw`border border-gray-300 w-[85%] max-w-[500px] p-2 mb-3 rounded text-white`}
+        />
+
+        <TextInput
+          placeholderTextColor="#717a7aff"
+          placeholder="Publisher's First Name"
+          value={firstName}
+          onChangeText={setFirstName}
+          style={tw`border border-gray-300 w-[85%] max-w-[500px] p-2 mb-3 rounded text-white`}
+        />
+
+        <TextInput
+          placeholderTextColor="#717a7aff"
+          placeholder="Publisher's Phone Number"
+          value={phone}
+          keyboardType="phone-pad"
+          onChangeText={setPhone}
+          style={tw`border border-gray-300 w-[85%] max-w-[500px] p-2 mb-3 rounded text-white`}
+        />
+
+        <Pressable onPress={pickImage} style={tw`bg-blue-500 p-3 rounded mb-3 w-[85%] max-w-[500px]`}>
+          <Text style={tw`text-white text-center`}>Upload Image (Optional)</Text>
+        </Pressable>
+
+        {imageUri && (
+          <Image
+            source={{ uri: imageUri }}
+            style={tw`w-[85%] max-w-[500px] h-40 mb-3 rounded`}
+            resizeMode="cover"
+          />
+        )}
+
+        {loading ?
+          <View style={tw`bg-blue-500 p-2 px-3 mt-8 rounded mb-3`}>
+            <ActivityIndicator  />
+          </View>
+          :
+          <Pressable disabled={loading} onPress={validateAndSubmit} style={tw`bg-blue-500 p-2 px-3 mt-8 rounded mb-3`}>
+            <Text style={tw`text-white text-center`}>Upload</Text>
+          </Pressable>
+        }
+      </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-});
