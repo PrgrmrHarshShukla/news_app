@@ -25,7 +25,7 @@ Simplest one is:
 Scan the QR Code with the Expo Go app from your mobile device and get the app running on your phone.
 
 Get the Android app apk here: https://expo.dev/accounts/kite_1/projects/ainews/builds/9ddbad5c-90e6-4684-9391-5e4029dd31ca
-
+Instead of clicking "Install" use the 3-dot button next to it and click "Download Build". 
 
 ## Explanation
 - I have implemented mocked responses for all the GPT API calls since I did not have an API key for the same.
