@@ -1,6 +1,5 @@
-# Welcome to your Expo app 👋
+# AI News App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
 
@@ -13,38 +12,30 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 2. Start the app
 
    ```bash
-   npx expo start
+   npx expo start --tunnel
    ```
 
-In the output, you'll find options to open the app in a
-
+These are the available options to run the app from the output along with a QR Code for Expo Go:
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- [Expo Go](https://expo.dev/go), (helps you try out the app directly on your mobile device (Android/iPhone))
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Simplest one is:
+Scan the QR Code with the Expo Go app from your mobile device and get the app running on your phone.
 
-## Get a fresh project
+Get the Android app apk here: https://expo.dev/accounts/kite_1/projects/ainews/builds/9ddbad5c-90e6-4684-9391-5e4029dd31ca
+Instead of clicking "Install" use the 3-dot button next to it and click "Download Build". 
 
-When you're ready, run:
+## Explanation
+- I have implemented mocked responses for all the GPT API calls since I did not have an API key for the same.
+- All expected features are present including bookmarks, automatic real-time feed refresh, etc.
+- Proper functional flow with proper handling of all possible edge cases
+- Image upload feature included
+- Post remove feature (from feed) included
+- End-to-end flow works: Submission → (mock)GPT Validation & Editing → Feed Display
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Preview Screenshots
+![WhatsApp Image 2025-08-04 at 06 01 11_14402d1e](https://github.com/user-attachments/assets/7a849a9c-a699-42c8-88f6-1a98d327ce2e)
+![WhatsApp Image 2025-08-04 at 06 01 12_110cd9e5](https://github.com/user-attachments/assets/30147c78-f509-458b-8753-135ea23176af)
+![WhatsApp Image 2025-08-04 at 06 01 12_cd50ee77](https://github.com/user-attachments/assets/73b554bd-cc20-462b-b398-e0ee1eabe667)
